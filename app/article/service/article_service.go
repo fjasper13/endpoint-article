@@ -38,5 +38,8 @@ func ValidateArticle(req *entities.Article) error {
 }
 
 func IndexArticle(pr *request.PageRequestStruct) ([]*entities.Article, int, error) {
-	return repository.IndexArticle(pr)
+	sql := "SELECT id, author, title, body, created_at FROM articles"
+	sqlCount := "SELECT COUNT(*) FROM articles"
+
+	return repository.IndexArticle(pr, sql, sqlCount)
 }

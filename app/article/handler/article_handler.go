@@ -44,7 +44,7 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare response
-	res := api.SetPaginate(r, pr, fetch, count)
+	res := api.SetResponsePagination(pr, fetch, count)
 	api.SendJSON(res, w)
 
 }
