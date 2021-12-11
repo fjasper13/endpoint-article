@@ -36,13 +36,12 @@ func StoreArticle(req *entities.Article) (response *entities.Article, err error)
 	return
 }
 
-func IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count int, err error) {
+func IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error) {
 	// Get DB Connection
 	db, err := database.GetDB()
 	if err != nil {
 		return nil, 0, err
 	}
-	sql := "SELECT id, author, title, body, created_at FROM articles"
 
 	// Handle Page Request
 	sql += database.BuildQuery(pr)
@@ -68,7 +67,6 @@ func IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count
 	}
 
 	// Count All Articles
-	sqlCount := "SELECT COUNT(*) FROM articles"
 	sqlCount += database.BuildQuery(pr)
 
 	err = db.QueryRow(sqlCount).Scan(&count)
