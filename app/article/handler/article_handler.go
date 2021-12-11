@@ -37,14 +37,14 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	//Convert Page Request
 	param := r.URL.Query()
 	pr := request.PageRequest(param)
-	fetch, _, err := service.IndexArticle(pr)
+	fetch, count, err := service.IndexArticle(pr)
 	if err != nil {
 		api.PrintError(err, w)
 		return
 	}
 
 	// Prepare response
-	res := api.NewResponse(fetch)
+	res := api.SetPaginate(r, pr, fetch, count)
 	api.SendJSON(res, w)
 
 }

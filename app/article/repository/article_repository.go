@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/fjasper13/endpoint-article/app/article/database"
 	"github.com/fjasper13/endpoint-article/app/article/entities"
@@ -46,18 +45,9 @@ func IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count
 	sql := "SELECT id, author, title, body, created_at FROM articles"
 
 	// Handle Page Request
-	if pr.Search != "" {
-		sql += " WHERE title LIKE '%" + pr.Search + "%' OR body LIKE '%" + pr.Search + "%'"
-	}
-	if pr.Sort.By != "" && pr.Sort.Type != "" {
-		sql += " ORDER BY " + pr.Sort.By + " " + pr.Sort.Type
-	}
-	if pr.Paginate == 1 {
+	sql += database.BuildQuery(pr)
 
-	}
-
-	fmt.Println(sql)
-	// Insert Statement
+	// Fetch Data
 	fetch, err := db.Query(sql)
 	if err != nil {
 		return nil, 0, err
@@ -67,6 +57,7 @@ func IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count
 
 	res = []*entities.Article{}
 
+	// Decode and Append to Array
 	for fetch.Next() {
 		article := entities.Article{}
 		err = fetch.Scan(&article.ID, &article.Author, &article.Title, &article.Body, &article.CreatedAt)
@@ -74,6 +65,15 @@ func IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count
 			return nil, 0, errors.New("500")
 		}
 		res = append(res, &article)
+	}
+
+	// Count All Articles
+	sqlCount := "SELECT COUNT(*) FROM articles"
+	sqlCount += database.BuildQuery(pr)
+
+	err = db.QueryRow(sqlCount).Scan(&count)
+	if err != nil {
+		return nil, 0, errors.New("500")
 	}
 
 	return

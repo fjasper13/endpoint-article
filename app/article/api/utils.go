@@ -46,19 +46,3 @@ type SimpleMeta struct {
 	StatusCode int      `json:"status_code"`
 	Message    []string `json:"message"`
 }
-
-func NewResponse(data interface{}) *SingleResponse {
-	response := &SingleResponse{
-		Data: data,
-		Meta: SimpleMeta{
-			StatusCode: http.StatusOK,
-			Message:    []string{"Success"},
-		},
-	}
-	return response
-}
-
-func SendJSON(data interface{}, w http.ResponseWriter) {
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(data)
-}
