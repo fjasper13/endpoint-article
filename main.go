@@ -14,6 +14,6 @@ func main() {
 	router.HandleFunc("/articles", handler.GetPosts).Methods("GET")
 	router.HandleFunc("/articles", handler.CreatePost).Methods("POST")
 
-	fmt.Println("Listen to :8000")
+	fmt.Println("Listen to Port :8000")
 	http.ListenAndServe(":8000", router)
 }
