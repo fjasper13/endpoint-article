@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/fjasper13/endpoint-article/app/article/database"
 	"github.com/fjasper13/endpoint-article/app/article/entities"
@@ -12,6 +13,7 @@ import (
 type ArticleRepository interface {
 	StoreArticle(req *entities.Article) (response *entities.Article, err error)
 	IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error)
+	ShowArticle(ID int) (res *entities.Article, err error)
 }
 
 type articleRepository struct {
@@ -73,6 +75,21 @@ func (r *articleRepository) IndexArticle(pr *request.PageRequestStruct, sql stri
 	if err != nil {
 		return nil, 0, errors.New("500")
 	}
+
+	return
+}
+
+func (r *articleRepository) ShowArticle(ID int) (res *entities.Article, err error) {
+	article := entities.Article{}
+	// Fetch Data
+	err = r.db.QueryRow("SELECT id, author, title, body, created_at FROM articles WHERE id = ? AND deleted_at IS NULL", ID).Scan(&article.ID, &article.Author, &article.Title, &article.Body, &article.CreatedAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New(fmt.Sprintf("No Article on ID : %d", ID))
+		}
+		return nil, err
+	}
+	res = &article
 
 	return
 }

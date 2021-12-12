@@ -11,6 +11,7 @@ import (
 type ArticleService interface {
 	PrepareStoreArticle(req *entities.Article) (response *entities.Article, err error)
 	IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count int, err error)
+	ShowArticle(ID int) (res *entities.Article, err error)
 }
 
 type articleService struct {
@@ -54,4 +55,8 @@ func (s *articleService) IndexArticle(pr *request.PageRequestStruct) ([]*entitie
 	sqlCount := "SELECT COUNT(*) FROM articles"
 
 	return s.articleRepository.IndexArticle(pr, sql, sqlCount)
+}
+
+func (s *articleService) ShowArticle(ID int) (*entities.Article, error) {
+	return s.articleRepository.ShowArticle(ID)
 }
