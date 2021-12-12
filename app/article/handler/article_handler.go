@@ -10,7 +10,15 @@ import (
 	"github.com/fjasper13/endpoint-article/app/article/service"
 )
 
-func CreatePost(w http.ResponseWriter, r *http.Request) {
+type articleHandler struct {
+	service service.ArticleService
+}
+
+func NewArticleHandler(srv service.ArticleService) *articleHandler {
+	return &articleHandler{srv}
+}
+
+func (h *articleHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	// Get Data From Body Request
 	var request *entities.Article
 	err := json.NewDecoder(r.Body).Decode(&request)
@@ -21,7 +29,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create New Article
-	result, err := service.PrepareStoreArticle(request)
+	result, err := h.service.PrepareStoreArticle(request)
 	if err != nil {
 		api.PrintError(err, w)
 		return
@@ -32,12 +40,11 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	api.SendJSON(res, w)
 }
 
-func GetPosts(w http.ResponseWriter, r *http.Request) {
-
+func (h *articleHandler) GetPosts(w http.ResponseWriter, r *http.Request) {
 	//Convert Page Request
 	param := r.URL.Query()
 	pr := request.PageRequest(param)
-	fetch, count, err := service.IndexArticle(pr)
+	fetch, count, err := h.service.IndexArticle(pr)
 	if err != nil {
 		api.PrintError(err, w)
 		return

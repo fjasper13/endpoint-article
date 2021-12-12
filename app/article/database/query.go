@@ -7,22 +7,13 @@ import (
 )
 
 func BuildQuery(pr *request.PageRequestStruct) (res string) {
-	if pr.Search != "" || len(pr.Filters) > 0 {
-		res += " WHERE "
-	}
+	res += " WHERE deleted_at IS NULL "
 	if pr.Search != "" {
-		res += "title LIKE '%" + pr.Search + "%' OR body LIKE '%" + pr.Search + "%'"
+		res += "AND title LIKE '%" + pr.Search + "%' OR body LIKE '%" + pr.Search + "%'"
 	}
 	if len(pr.Filters) > 0 {
-		if pr.Search != "" {
-			res += " AND "
-		}
-		for i, v := range pr.Filters {
-			if i == len(pr.Filters)-1 {
-				res += v.Option + " " + v.Operator + " '" + v.Value + "' "
-			} else {
-				res += v.Option + " " + v.Operator + " '" + v.Value + "' AND "
-			}
+		for _, v := range pr.Filters {
+			res += " AND " + v.Option + " " + v.Operator + " '" + v.Value + "' "
 		}
 	}
 	if pr.Sort.By != "" && pr.Sort.Type != "" {
