@@ -43,7 +43,7 @@ key:filter[] , value:{"option":"title","operator":"=","value":"GolangCoding"}
 > redis-server
 2. Check redis server
 > redis-cli ping 
-
+3. Endpoint Get Single Article
 > http://localhost:8000/articles/{article_id} 
 
 ### Post Single Article
