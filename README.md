@@ -1,5 +1,5 @@
-# EndPoint API (Create Read)
-### I'm Using Golang Language with Redis Cache
+# EndPoint API (Create and Read)
+### I'm Using Golang, Mux Library, MySQL, and Redis
 
 Golang Documentation : https://go.dev/doc/ <br/>
 Golang Instalation : https://go.dev/doc/install <br/>
