@@ -29,25 +29,26 @@ key: sort , value author|desc -> for desc
 
 4. search any word in title or body
 Example to Add in Params: <br/>
-key: search , value:Golang Coding
-> http://localhost:8000/articles?search=Golang Coding
+key: search , value:GolangCoding
+> http://localhost:8000/articles?search=GolangCoding
 
 5. filter by {column} (can add more than 1 filter)
 Example to Add in Params: <br/>
 key:filter[] , value:{"option":"author","operator":"=","value":"jasper"} <br/>
-key:filter[] , value:{"option":"title","operator":"=","value":"Golang Coding"}
-> http://localhost:8000/articles?filter[]={"option":"author","operator":"=","value":"jasper"}&filter[]={"option":"title","operator":"=","value":"Golang Coding"}
+key:filter[] , value:{"option":"title","operator":"=","value":"GolangCoding"}
+> http://localhost:8000/articles?filter[]={"option":"author","operator":"=","value":"jasper"}&filter[]={"option":"title","operator":"=","value":"GolangCoding"}
 
 ### Get Single Article
 1. Run redis server first 
 > redis-server
 2. Check redis server
-> redis-cli ping
+> redis-cli ping 
+<br/>
 > http://localhost:8000/articles/{article_id} 
 
 ### Post Single Article
 > http://localhost:8000/articles 
-> 
+
 body:
 {
     "author": "Jasper",
