@@ -1,4 +1,4 @@
-# EndPoint API (CR)
+# EndPoint API (Create Read)
 ### I'm Using Golang Language with Redis Cache
 
 Golang Documentation : https://go.dev/doc/
