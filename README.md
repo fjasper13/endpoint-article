@@ -11,7 +11,7 @@ Redis Instalation : https://redis.io/download
 2. Make MySQL Database According to .env File
 3. Type **go run main.go** In Your Terminal
 
-## EndPoint Documentation ( Using Postman)
+## EndPoint Documentation (Using Postman)
 ### Get All Articles
 1. standart response
 > http://localhost:8000/articles
@@ -23,7 +23,7 @@ key: per_page , value:3 <br/>
 key: paginate , value:1 (true or false for using pagination response)
 > http://localhost:8000/articles?page=1&per_page=3&paginate=1
 
-3. sort by {collumn} ( default sort by last created_at )
+3. sort by {collumn} (default sort by last created_at )
 Example to Add in Params: <br/>
 key: sort , value author|asc -> for asc <br/>
 key: sort , value author|desc -> for desc
