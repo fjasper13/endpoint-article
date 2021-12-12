@@ -11,39 +11,39 @@ Redis Instalation : https://redis.io/download
 
 ## EndPoint Documentation ( Using Postman)
 ### Get All Articles
-1. standart response
+1. standart response <br/>
 http://localhost:8000/articles -> standard response
 
 2. pagination response:
-Example to Add in Params:
-key: page, value: 1
-key: per_page , value:3
-key: paginate , value:1 (true or false for using pagination response)
+Example to Add in Params: <br/>
+key: page, value: 1 <br/>
+key: per_page , value:3 <br/>
+key: paginate , value:1 (true or false for using pagination response) <br/>
 
 3. sort by {collumn} ( default sort by last created_at )
-Example to Add in Params:
-key: sort , value author|asc -> for asc
-key: sort , value author|desc -> for desc
+Example to Add in Params: <br/>
+key: sort , value author|asc -> for asc <br/>
+key: sort , value author|desc -> for desc <br/>
 
 4. search any word in title or body
-Example to Add in Params:
-key: search , value:Golang Coding
+Example to Add in Params: <br/>
+key: search , value:Golang Coding <br/>
 
 5. filter by {column} (can add more than 1 filter)
-Example to Add in Params:
-key:filter[] , value:{"option":"author","operator":"=","value":"jasper"}
-key:filter[] , value:{"option":"title","operator":"=","value":"Golang Coding"}
+Example to Add in Params: <br/>
+key:filter[] , value:{"option":"author","operator":"=","value":"jasper"} <br/>
+key:filter[] , value:{"option":"title","operator":"=","value":"Golang Coding"} <br/>
 
 ### Get Single Article
-1. Run redis server first
+1. Run redis server first 
 > redis-server
 2. Check redis server
 > redis-cli ping
 
-http://localhost:8000/articles/{article_id}
+http://localhost:8000/articles/{article_id} <br/>
 
 ### Post Single Article
-http://localhost:8000/articles
+http://localhost:8000/articles <br/>
 body:
 {
     "author": "Jasper",
