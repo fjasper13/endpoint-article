@@ -5,11 +5,23 @@ import (
 	"time"
 
 	"github.com/fjasper13/endpoint-article/app/article/entities"
-	"github.com/fjasper13/endpoint-article/app/article/repository"
 	"github.com/fjasper13/endpoint-article/app/article/request"
 )
 
-func PrepareStoreArticle(req *entities.Article) (res *entities.Article, err error) {
+type ArticleService interface {
+	PrepareStoreArticle(req *entities.Article) (response *entities.Article, err error)
+	IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count int, err error)
+}
+
+type articleService struct {
+	articleRepository ArticleRepository
+}
+
+func NewArticleService(repository ArticleRepository) *articleService {
+	return &articleService{repository}
+}
+
+func (s *articleService) PrepareStoreArticle(req *entities.Article) (res *entities.Article, err error) {
 	// Null Handling
 	err = ValidateArticle(req)
 	if err != nil {
@@ -17,12 +29,12 @@ func PrepareStoreArticle(req *entities.Article) (res *entities.Article, err erro
 	}
 	req.CreatedAt = time.Now()
 
-	res, err = StoreArticle(req)
+	res, err = s.StoreArticle(req)
 	return
 }
 
-func StoreArticle(req *entities.Article) (*entities.Article, error) {
-	return repository.StoreArticle(req)
+func (s *articleService) StoreArticle(req *entities.Article) (*entities.Article, error) {
+	return s.articleRepository.StoreArticle(req)
 }
 
 func ValidateArticle(req *entities.Article) error {
@@ -37,9 +49,9 @@ func ValidateArticle(req *entities.Article) error {
 	return nil
 }
 
-func IndexArticle(pr *request.PageRequestStruct) ([]*entities.Article, int, error) {
+func (s *articleService) IndexArticle(pr *request.PageRequestStruct) ([]*entities.Article, int, error) {
 	sql := "SELECT id, author, title, body, created_at FROM articles"
 	sqlCount := "SELECT COUNT(*) FROM articles"
 
-	return repository.IndexArticle(pr, sql, sqlCount)
+	return s.articleRepository.IndexArticle(pr, sql, sqlCount)
 }

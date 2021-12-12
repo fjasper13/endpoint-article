@@ -1,6 +1,7 @@
-package repository
+package service
 
 import (
+	"database/sql"
 	"errors"
 
 	"github.com/fjasper13/endpoint-article/app/article/database"
@@ -8,16 +9,22 @@ import (
 	"github.com/fjasper13/endpoint-article/app/article/request"
 )
 
-func StoreArticle(req *entities.Article) (response *entities.Article, err error) {
-	// Get DB Connection
-	db, err := database.GetDB()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
+type ArticleRepository interface {
+	StoreArticle(req *entities.Article) (response *entities.Article, err error)
+	IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error)
+}
 
+type articleRepository struct {
+	db *sql.DB
+}
+
+func NewArticleRepository(db *sql.DB) *articleRepository {
+	return &articleRepository{db}
+}
+
+func (r *articleRepository) StoreArticle(req *entities.Article) (response *entities.Article, err error) {
 	// Insert Statement
-	insert, err := db.Prepare("INSERT INTO articles(author,title,body,created_at) VALUES(?,?,?,?)")
+	insert, err := r.db.Prepare("INSERT INTO articles(author,title,body,created_at) VALUES(?,?,?,?)")
 	if err != nil {
 		return nil, err
 	}
@@ -36,18 +43,11 @@ func StoreArticle(req *entities.Article) (response *entities.Article, err error)
 	return
 }
 
-func IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error) {
-	// Get DB Connection
-	db, err := database.GetDB()
-	if err != nil {
-		return nil, 0, err
-	}
-
+func (r *articleRepository) IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error) {
 	// Handle Page Request
 	sql += database.BuildQuery(pr)
-
 	// Fetch Data
-	fetch, err := db.Query(sql)
+	fetch, err := r.db.Query(sql)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -69,7 +69,7 @@ func IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (r
 	// Count All Articles
 	sqlCount += database.BuildQuery(pr)
 
-	err = db.QueryRow(sqlCount).Scan(&count)
+	err = r.db.QueryRow(sqlCount).Scan(&count)
 	if err != nil {
 		return nil, 0, errors.New("500")
 	}
