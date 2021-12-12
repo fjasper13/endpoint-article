@@ -7,7 +7,9 @@ Redis Instalation : https://redis.io/download
 <br/>
 
 ### How To Run The Code
-> go run main.go
+1. Adjust the .env File According to Your Need
+2. Make MySQL Database According to .env File
+3. go run main.go in your terminal
 
 ## EndPoint Documentation ( Using Postman)
 ### Get All Articles
