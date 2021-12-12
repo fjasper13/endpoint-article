@@ -35,6 +35,11 @@ key:filter[] , value:{"option":"author","operator":"=","value":"jasper"}
 key:filter[] , value:{"option":"title","operator":"=","value":"Golang Coding"}
 
 ### Get Single Article
+1. Run redis server first
+> redis-server
+2. Check redis server
+> redis-cli ping
+
 http://localhost:8000/articles/{article_id}
 
 ### Post Single Article
