@@ -12,7 +12,7 @@ import (
 
 type ArticleRepository interface {
 	StoreArticle(req *entities.Article) (response *entities.Article, err error)
-	IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error)
+	IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count int, err error)
 	ShowArticle(ID int) (res *entities.Article, err error)
 }
 
@@ -45,8 +45,9 @@ func (r *articleRepository) StoreArticle(req *entities.Article) (response *entit
 	return
 }
 
-func (r *articleRepository) IndexArticle(pr *request.PageRequestStruct, sql string, sqlCount string) (res []*entities.Article, count int, err error) {
+func (r *articleRepository) IndexArticle(pr *request.PageRequestStruct) (res []*entities.Article, count int, err error) {
 	// Handle Page Request
+	sql := "SELECT id, author, title, body, created_at FROM articles"
 	sql += database.BuildQuery(pr)
 	// Fetch Data
 	fetch, err := r.db.Query(sql)
@@ -69,6 +70,7 @@ func (r *articleRepository) IndexArticle(pr *request.PageRequestStruct, sql stri
 	}
 
 	// Count All Articles
+	sqlCount := "SELECT COUNT(*) FROM articles"
 	sqlCount += database.BuildQuery(pr)
 
 	err = r.db.QueryRow(sqlCount).Scan(&count)
