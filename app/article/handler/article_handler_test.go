@@ -33,6 +33,7 @@ func TestShowArticleHandler(t *testing.T) {
 
 	req, err := http.NewRequest("GET", "http://localhost:8000/articles/1", nil)
 	fmt.Println("GEGE")
+
 	res := httptest.NewRecorder()
 	handler.ShowArticle(res, req)
 
